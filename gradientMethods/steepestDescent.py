@@ -31,9 +31,11 @@ def minimize (A, b, x_init=None, alpha=0, TOL=1e-6, rel_conv=True, MAX_ITER=100)
         #Write your code here
         grad = x.T@A - b
         
-        alpha = (grad.T @ grad) / (grad.T @ A @ grad)
-
-        x = x - alpha * grad
+        if not alpha:
+            a = (grad.T @ grad) / (grad.T @ A @ grad)
+            x = x - a * grad
+        else:
+            x = x - alpha * grad
 
         k += 1
         d = np.linalg.norm(grad)
