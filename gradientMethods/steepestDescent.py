@@ -29,5 +29,38 @@ def minimize (A, b, x_init=None, alpha=0, TOL=1e-6, rel_conv=True, MAX_ITER=100)
     while (d > TOL and k < MAX_ITER):
 
         #Write your code here
+        grad = x.T@A - b
+        
+        alpha = (grad.T @ grad) / (grad.T @ A @ grad)
+
+        x = x - alpha * grad
+
+        k += 1
+        d = np.linalg.norm(grad)
+        
+        xks.append(x)
 
     return xks
+
+if __name__ == '__main__':
+    def f(x:np.ndarray, A:np.ndarray, b:np.ndarray) -> np.float64:
+        return 0.5 * x.T@A@x - x.T@b
+    
+    def grad_f(x:np.ndarray, A:np.ndarray, b:np.ndarray) -> np.ndarray:
+        return x.T@A - b
+    
+    A = np.array([[4, 0],
+                 [0, 1]])
+
+    b = np.array([1, 2])
+
+    x = np.ones_like(b)
+
+    grad = grad_f(x, A, b)  # this is a vector
+    alpha = (grad.T @ grad) / (grad.T @ A @ grad)
+    print(grad_f(x, A, b))
+    print(f(x, A, b))
+    print(grad)
+    print(alpha)
+
+    print(minimize(A, b))
